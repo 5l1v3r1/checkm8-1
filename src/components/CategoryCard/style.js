@@ -17,19 +17,15 @@ const styles = {
     borderRadius: 10,
     elevation: 10,
   },
-  quote: {
+
+  dialogBox: {
     flex: 2,
     marginTop: 5,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 10,
   },
-  delete: {
-    flex: 2,
-    marginTop: 5,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 10,
+  dialogBoxActive: {
     backgroundColor: '#f44248',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -39,7 +35,7 @@ const styles = {
     fontSize: 20,
     color: '#e8e8e8',
   },
-  quoteText: {
+  dialogText: {
     color: 'white',
     fontFamily: 'Raleway-Italic',
     fontSize: 16,

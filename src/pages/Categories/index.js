@@ -5,7 +5,6 @@ import CategoriesView from '../../components/CategoriesView';
 import { storeData, retrieveData, removeData } from '../../utils/common';
 import ActionButton from '../../components/Shared/ActionButton';
 import newIcon from '../../assets/plus.png';
-import defaultCategories from './data';
 
 class Categories extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -19,23 +18,19 @@ class Categories extends Component {
   state={
     categories: [],
     createMode: false,
-    modalContent: { name: null, quote: null },
+    modalContent: { name: null },
   }
 
   componentDidMount() {
-    this.fetchCategories()
-      .catch(() => {
-        storeData('Categories', defaultCategories)
-          .then(this.fetchCategories);
-      });
+    this.fetchCategories();
     this.props.navigation.setParams({ toggleCreateMode: this.toggleCreateMode });
   }
 
 
-  setModal=(name, quote) => () => {
+  setModal=name => () => {
     this.setState({
       modalContent: {
-        name, quote,
+        name,
       },
     });
   }
@@ -43,20 +38,20 @@ class Categories extends Component {
   fetchCategories=() => retrieveData('Categories')
     .then((data) => {
       if (data === null) {
-        throw new Error('not set');
+        return;
       }
       const categories = JSON.parse(data);
       this.setState({ categories });
     })
 
-    addCategory=(categoryName, quote) => {
-      if (categoryName.length > 0 && quote.length > 0) {
-        const newCategory = { categoryName, quote };
+    addCategory=(categoryName) => {
+      if (categoryName.length > 0) {
+        const newCategory = { categoryName };
         const updatedCategories = this.state.categories.concat(newCategory);
         storeData('Categories', updatedCategories).then(this.fetchCategories).then(this.toggleCreateMode);
       } else {
         ToastAndroid.showWithGravity(
-          'U being cheeky m8? Fill the name and quote fields or press back to cancel',
+          'Fill the name field or press back to cancel',
           ToastAndroid.LONG,
           ToastAndroid.CENTER,
         );
@@ -70,34 +65,23 @@ class Categories extends Component {
       storeData('Categories', updatedList).then(this.fetchCategories);
     }
 
-    editCategory=(oldName, oldQuote) => (name, quote) => {
-      if (name === '' || quote === '') {
+    editCategory=oldName => (name) => {
+      if (name === '') {
         ToastAndroid.showWithGravity(
-          'Fill the values for category name and quote',
+          'Category name cannot be empty',
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-      } else if (oldName === name && oldQuote === quote) {
-        ToastAndroid.showWithGravity(
-          'Press back to cancel editing or enter new values',
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        );
-      } else if (oldName === name) {
-        const key = this.state.categories.map(obj => obj.categoryName).indexOf(name);
-        const updatedObj = { ...this.state.categories[key], quote };
-        const updatedList = [...this.state.categories];
-        updatedList.splice(key, 1, updatedObj);
-        storeData('Categories', updatedList).then(this.fetchCategories).then(this.setModal(null, null));
-      } else {
+      } else if (oldName !== name) {
         const key = this.state.categories.map(obj => obj.categoryName).indexOf(oldName);
         const updatedList = [...this.state.categories];
         updatedList[key].categoryName = name;
-        updatedList[key].quote = quote;
         this.replaceList(oldName, name).then(() => {
           storeData('Categories', updatedList).then(this.fetchCategories)
-            .then(this.setModal(null, null));
+            .then(this.setModal(null));
         });
+      } else {
+        this.setModal(null)();
       }
     }
 

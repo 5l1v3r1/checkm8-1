@@ -54,7 +54,7 @@ class Checklist extends Component {
     const key = changeEvent.nativeEvent.text;
     if (key === '') {
       ToastAndroid.showWithGravity(
-        "Can't track the void, enter something real",
+        'Item cannot be empty',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
@@ -74,17 +74,11 @@ class Checklist extends Component {
     const newValue = changeEvent.nativeEvent.text;
     if (newValue === '') {
       ToastAndroid.showWithGravity(
-        "Can't track the void, enter something real",
+        'Item cannot be empty',
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
-    } else if (newValue === oldValue) {
-      ToastAndroid.showWithGravity(
-        'Change is the only constant. Enter a new label or press back to cancel editing',
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
-    } else {
+    } else if (newValue !== oldValue) {
       const updatedList = {
         ...this.state.checklistData,
         [newValue]: this.state.checklistData[oldValue],
@@ -92,6 +86,8 @@ class Checklist extends Component {
       };
       storeData(this.state.selectedCategory, updatedList)
         .then(this.fetchList).then(this.setModal(null));
+    } else {
+      this.setModal(null)();
     }
   }
 

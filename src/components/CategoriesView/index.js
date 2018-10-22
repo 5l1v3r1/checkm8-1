@@ -14,14 +14,13 @@ import { noop } from '../../utils/common';
 class CategoriesView extends React.Component {
   render() {
     const { categories } = this.props;
-    const categoryCards = categories.map(({ categoryName, quote }) => (
+    const categoryCards = categories.map(({ categoryName }) => (
       <CategoryCard
         categoryName={categoryName}
-        quote={quote}
         key={categoryName}
         onClick={this.props.onCardClick(categoryName)}
         onDelete={this.props.deleteCategory(categoryName)}
-        onEdit={this.props.setModal(categoryName, quote)}
+        onEdit={this.props.setModal(categoryName)}
       />
     ));
     return (
@@ -43,12 +42,11 @@ class CategoriesView extends React.Component {
           && (
           <Modal
             transparent
-            onRequestClose={this.props.setModal(null, null)}
+            onRequestClose={this.props.setModal(null)}
             animationType="slide"
           >
             <CategoryModal
-              onSubmit={this.props.editCategory(this.props.modalContent.name,
-                this.props.modalContent.quote)}
+              onSubmit={this.props.editCategory(this.props.modalContent.name)}
               modalContent={this.props.modalContent}
             />
           </Modal>
@@ -63,28 +61,21 @@ class CategoriesView extends React.Component {
             {categoryCards}
           </ScrollView>
         </View>
-        <Text style={styles.footer}>
-            Report bugs or contribute to this project on
-          {' '}
-          <Text style={styles.link} onPress={this.props.openLink}>
-            github
-          </Text>
-        </Text>
       </View>
     );
   }
 }
 CategoriesView.defaultProps = {
   categories: [
-    { categoryName: 'Documents', quote: 'quote1' },
-    { categoryName: 'Medication', quote: 'quote2' },
-    { categoryName: 'Apparel', quote: 'quote3' },
-    { categoryName: 'Electronics', quote: 'quote4' },
-    { categoryName: 'Toiletries', quote: 'quote5' },
-    { categoryName: 'Kitchenware', quote: 'quote6' },
-    { categoryName: 'Food Items', quote: 'quote4' },
-    { categoryName: 'Stationery', quote: 'quote5' },
-    { categoryName: 'Misc', quote: 'quote6' },
+    { categoryName: 'Documents' },
+    { categoryName: 'Medication' },
+    { categoryName: 'Apparel' },
+    { categoryName: 'Electronics' },
+    { categoryName: 'Toiletries' },
+    { categoryName: 'Kitchenware' },
+    { categoryName: 'Food Items' },
+    { categoryName: 'Stationery' },
+    { categoryName: 'Misc' },
   ],
   onCardClick: noop,
   modalContent: {},
@@ -94,7 +85,6 @@ CategoriesView.defaultProps = {
   setModal: noop,
   toggleCreateMode: noop,
   createMode: false,
-  openLink: noop,
 };
 CategoriesView.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.object),
@@ -106,6 +96,5 @@ CategoriesView.propTypes = {
   setModal: PropTypes.func,
   toggleCreateMode: PropTypes.func,
   createMode: PropTypes.bool,
-  openLink: PropTypes.func,
 };
 export default CategoriesView;

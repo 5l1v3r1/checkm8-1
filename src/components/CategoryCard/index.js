@@ -23,13 +23,9 @@ class CategoryCard extends React.Component {
   }
 
 
-  showQuoteAndActions=() => (
+  showActions=() => (
     <React.Fragment>
-      <View style={styles.quote}>
-        <Text style={styles.quoteText}>
-          {this.props.quote}
-        </Text>
-      </View>
+      <View style={styles.dialogBox} />
       <View style={styles.actionBar}>
         <ActionButton src={editIcon} onPress={this.props.onEdit} />
         <ActionButton src={deleteIcon} onPress={this.toggleDeleteMode} />
@@ -39,8 +35,8 @@ class CategoryCard extends React.Component {
 
   showDeleteDialog=() => (
     <React.Fragment>
-      <View style={styles.delete}>
-        <Text style={styles.quoteText}>
+      <View style={{ ...styles.dialogBox, ...styles.dialogBoxActive }}>
+        <Text style={styles.confirmText}>
         Confirm Delete?
         </Text>
       </View>
@@ -62,7 +58,7 @@ class CategoryCard extends React.Component {
         {
           this.state.showDeleteMode
             ? this.showDeleteDialog()
-            : this.showQuoteAndActions()
+            : this.showActions()
         }
       </View>
     );
@@ -71,7 +67,6 @@ class CategoryCard extends React.Component {
 
 CategoryCard.defaultProps = {
   categoryName: 'Category1',
-  quote: 'quote1',
   onClick: () => {},
   onDelete: noop,
   onEdit: noop,
@@ -79,7 +74,6 @@ CategoryCard.defaultProps = {
 
 CategoryCard.propTypes = {
   categoryName: PropTypes.string,
-  quote: PropTypes.string,
   onClick: PropTypes.func,
   onDelete: PropTypes.func,
   onEdit: PropTypes.func,

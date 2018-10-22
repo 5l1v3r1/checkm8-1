@@ -12,19 +12,15 @@ import noop from '../../../../utils/common';
 class CategoryModal extends React.Component {
     state={
       name: this.props.modalContent.name,
-      quote: this.props.modalContent.quote,
     }
 
     setName=(name) => {
       this.setState({ name });
     }
 
-    setQuote=(quote) => {
-      this.setState({ quote });
-    }
 
     submit=() => {
-      this.props.onSubmit(this.state.name, this.state.quote);
+      this.props.onSubmit(this.state.name);
     }
 
     render() {
@@ -43,15 +39,6 @@ class CategoryModal extends React.Component {
               onChangeText={this.setName}
               defaultValue={this.props.modalContent.name}
             />
-            <TextInput
-              placeholder="Enter quote"
-              placeholderTextColor={styles.modalPlaceholder.color}
-              style={styles.modalText}
-              underlineColorAndroid={styles.modalText.color}
-              returnKeyType="done"
-              onChangeText={this.setQuote}
-              defaultValue={this.props.modalContent.quote}
-            />
             <Button title="Done" onPress={this.submit} />
           </View>
         </View>
@@ -62,7 +49,6 @@ class CategoryModal extends React.Component {
 CategoryModal.defaultProps = {
   modalContent: {
     name: '',
-    quote: '',
   },
   onSubmit: noop,
 };
